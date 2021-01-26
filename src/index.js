@@ -7,8 +7,9 @@ import reportWebVitals from './reportWebVitals';
 import { createStore } from 'redux';
 import tasks from './reducers'
 import { Provider } from 'react-redux';
+import { devToolsEnhancer } from 'redux-devtools-extension';
 
-const store = createStore(tasks);
+const store = createStore(tasks, devToolsEnhancer());
 
 ReactDOM.render(
   <Provider store={store}>
@@ -16,6 +17,26 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
+// HMR for react
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    const NextApp = require('./App').default;
+    ReactDOM.render(
+      <Provider store={store}>
+        <NextApp />
+      </Provider>
+    )
+  })
+}
+
+// HMR for redux reducer
+if (module.hot) {
+  module.hot.accept('./reducers', () => {
+    const nextRootReducer = require('./reducers').default;
+    store.replaceReducer(nextRootReducer);
+  })
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
