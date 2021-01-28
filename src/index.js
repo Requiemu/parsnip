@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import tasks from './reducers'
 import { Provider } from 'react-redux';
-import { devToolsEnhancer } from 'redux-devtools-extension';
+import { devToolsEnhancer, composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
+import logger from './middleware/logger';
 
-const store = createStore(tasks, devToolsEnhancer());
+// const store = createStore(tasks, devToolsEnhancer());
+const store = createStore(tasks, composeWithDevTools(applyMiddleware(thunk, logger)));
 
 ReactDOM.render(
   <Provider store={store}>
