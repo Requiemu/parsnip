@@ -1,8 +1,9 @@
 import './App.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import TasksPage from './components/TasksPage';
+import FlashMessage from './components/FlashMessage';
 
-import { createTask, editTask } from './actions';
+import { createTask, editTask, fetchTasks } from './actions';
 
 import { connect } from 'react-redux';
 
@@ -13,9 +14,13 @@ function mapStateToProps(state) {
 }
 
 function App(props) {
-  
-  function onCreateTask({title, description}) {
-    props.dispatch(createTask({title, description}));
+
+  useEffect(() => {
+    props.dispatch(fetchTasks());
+  }, [])
+
+  function onCreateTask({ title, description }) {
+    props.dispatch(createTask({ title, description, status: 'Unstarted' }));
   }
 
   const onStatusChange = (id, status) => {
@@ -24,8 +29,16 @@ function App(props) {
   }
 
   return (
-    <div className='main-content'>
-      <TasksPage tasks={props.tasks} onCreateTask={onCreateTask} onStatusChange={onStatusChange}></TasksPage>
+    <div className="container">
+      {props.tasks.error && <FlashMessage message={props.error}/>}
+      <div className='main-content'>
+        <TasksPage
+          tasks={props.tasks.content}
+          onCreateTask={onCreateTask}
+          onStatusChange={onStatusChange}
+          isLoading={props.tasks.isLoading}
+        ></TasksPage>
+      </div>
     </div>
   );
 }

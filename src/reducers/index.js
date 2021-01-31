@@ -1,38 +1,33 @@
-import { uniqueId } from '../actions';
-
-const mockTasks = [
-    {
-        id: uniqueId(),
-        title: 'Learn Redux',
-        description: 'The store, actions, and reducers, oh my!',
-        status: 'In Progress',
-    },
-    {
-        id: uniqueId(),
-        title: 'Peace on Earth',
-        description: 'No big deal.',
-        status: 'Unstarted'
-    }
-  
-  ];
-
-export default function tasks(state={ tasks: mockTasks}, action) {
-    console.log('reducer tasks: ', action)
-    if (action.type === "CREATE_TASK") {
-        return {tasks: state.tasks.concat(action.payload)};
-    } else if (action.type === "EDIT_TASK") {
-        const { payload } = action;
-        const result = {
-            tasks: state.tasks.map(task => {
-                if (task.id === payload.id) {
-                    return Object.assign({}, task, payload.params);
-                }
-                return task;
-            })
+export default function tasksReducer(state = { isLoading: false, content: [] }, action) {
+    switch (action.type) {
+        case ("EDIT_TASK_SUCCEEDED"): {
+            const { payload } = action;
+            const result = {
+                isLoading: false,
+                content: state.content.map(task => {
+                    if (task.id === payload.task.id) {
+                        return Object.assign({}, task, payload.task);
+                    }
+                    return task;
+                })
+            }
+            return result;
+        } case ("FETCH_TASKS_STARTED"): {
+            return {
+                ...state,
+                isLoading: true
+            }
+        } case ("FETCH_TASKS_SUCCEEDED"): {
+            return {
+                isLoading: false,
+                content: action.payload.tasks
+            }
+        } case ("CREATE_TASK_SUCCEEDED"): {
+            return {
+                isLoading: false,
+                content: state.content.concat(action.payload.task)
+            }
         }
-        console.log('final state: ', result)
-        return result;
     }
-    console.log('final state: ', state)
     return state;
 }
