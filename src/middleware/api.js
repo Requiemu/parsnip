@@ -10,7 +10,6 @@ function makeCall(endpoint) {
 }
 
 const apiMiddleware = store => next => action => {
-    console.log('action in apiMiddleware: ', action);
     const callApi = action[CALL_API];
     if (typeof callApi === 'undefined') {
         return next(action);

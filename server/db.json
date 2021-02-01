@@ -12,7 +12,7 @@
       "id": 3,
       "title": "Create Facebook for dogs",
       "description": "The hottest new social network",
-      "status": "Unstarted"
+      "status": "In Progress"
     },
     {
       "status": "In Progress",
@@ -63,7 +63,7 @@
     {
       "title": "123",
       "description": "444",
-      "status": "Unstarted",
+      "status": "In Progress",
       "id": 12
     }
   ]

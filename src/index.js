@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import createSagaMiddleware from 'redux-saga';
 
 import { applyMiddleware, createStore } from 'redux';
 import tasksReducer from './reducers'
@@ -11,6 +12,9 @@ import { devToolsEnhancer, composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk';
 import logger from './middleware/logger';
 import apiMiddleware from './middleware/api';
+import rootSaga from './sagas';
+
+const sagaMiddleware = createSagaMiddleware();
 
 // const store = createStore(tasks, devToolsEnhancer());
 const rootReducer = (state = {}, action) => {
@@ -18,7 +22,9 @@ const rootReducer = (state = {}, action) => {
     tasks: tasksReducer(state.tasks, action)
   }
 }
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, apiMiddleware, logger)));
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, apiMiddleware, sagaMiddleware,  logger)));
+
+sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
   <Provider store={store}>
