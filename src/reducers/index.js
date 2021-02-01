@@ -22,6 +22,12 @@ export default function tasksReducer(state = { isLoading: false, content: [] }, 
                 isLoading: false,
                 content: action.payload.tasks
             }
+        } case ("FETCH_TASKS_FAILED"): {
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload.error
+            }
         } case ("CREATE_TASK_SUCCEEDED"): {
             return {
                 isLoading: false,

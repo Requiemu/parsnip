@@ -7,6 +7,9 @@ export function fetchTasks() {
             setTimeout(() => {
                 dispatch(fetchTasksSucceeded(resp.data));                
             }, 2000);
+            // throw new Error('Oh noes! Unable to fetch tasks!');
+        }).catch((error) => {
+            dispatch(fetchTasksFailed(error.message));
         })
     }
 }
@@ -22,6 +25,15 @@ export function fetchTasksSucceeded(tasks) {
         type: 'FETCH_TASKS_SUCCEEDED',
         payload: {
             tasks
+        }
+    }
+}
+
+export function fetchTasksFailed(error) {
+    return {
+        type: 'FETCH_TASKS_FAILED',
+        payload: {
+            error,
         }
     }
 }

@@ -30,7 +30,7 @@ function App(props) {
 
   return (
     <div className="container">
-      {props.tasks.error && <FlashMessage message={props.error}/>}
+      {props.tasks.error && <FlashMessage message={props.tasks.error}/>}
       <div className='main-content'>
         <TasksPage
           tasks={props.tasks.content}
