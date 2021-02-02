@@ -33,6 +33,14 @@ export default function tasksReducer(state = { isLoading: false, content: [] }, 
                 isLoading: false,
                 content: state.content.concat(action.payload.task)
             }
+        } case ("TIMER_INCREMENT"): {
+            const nextTasks = state.content.map(task => {
+                if (task.id === action.payload.taskId) {
+                    return {...task, timer: task.timer + 1}
+                }
+                return task;
+            })
+            return {...state, content: nextTasks};
         }
     }
     return state;

@@ -61,6 +61,9 @@ export function editTask(id, params) {
         const updatedTask = Object.assign({}, task, params);
         api.editTask(id, updatedTask).then(resp => {
             dispatch(editTaskSucceeded(resp.data));
+            if (resp.data.status === 'In Progress') {
+                dispatch(progressTimerStart(resp.data.id));
+            }
         })
     }
 }
