@@ -6,7 +6,7 @@ export const FETCH_TASKS_SUCCEEDED = 'FETCH_TASKS_SUCCEEDED';
 export const FETCH_TASKS_FAILED = 'FETCH_TASKS_FAILED';
 
 export function fetchTasks() {
-   return fetchTaskStarted();
+    return fetchTaskStarted();
 }
 
 export function fetchTaskStarted() {
@@ -55,6 +55,15 @@ function progressTimerStart(taskId) {
     }
 }
 
+function progressTimerStop(taskId) {
+    return {
+        type: 'TIMER_STOPPED',
+        payload: {
+            taskId
+        }
+    }
+}
+
 export function editTask(id, params) {
     return (dispatch, getState) => {
         const task = getTaskById(getState().tasks.content, id);
@@ -64,6 +73,9 @@ export function editTask(id, params) {
             if (resp.data.status === 'In Progress') {
                 dispatch(progressTimerStart(resp.data.id));
             }
+            if (task.status === 'In Progress') {
+                return dispatch(progressTimerStop(resp.data.id));
+            }
         })
     }
 }
@@ -71,7 +83,7 @@ export function editTask(id, params) {
 export function editTaskSucceeded(task) {
     return {
         type: 'EDIT_TASK_SUCCEEDED',
-        payload: {task},
+        payload: { task },
     }
 }
 
